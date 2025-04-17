@@ -1,56 +1,359 @@
 # 안지혜 202430113
+## 4월 17일(7주차)
 
-## 3월 27일(4주차)
+### this 레퍼런스 
+```java
+- 객체 자신에 대한 레퍼런스
+    - 컴파일러에 의해 자동 관리, 개발자는 only 사용
+    - this.멤버 형태로 멤버 접근 시 사용
 
-### 가비지 컬렉션
-- 자바 언어는 메모리 할당 기능 O / 메모리 반환 기능 X
-- 사용하지 않는 메모리는 JVM에 의해 자동 반환됨
+ex) public class Circle {
+    int radius;
+    public Circle(int radius) {
+        this.radius = radius; 
+    }
+    void set(int radius) {
+        this.radius = radius; 
+    }
+    public static void main(String[] args) {
+        Circle ob1 = new Circle(1);
+        Circle ob2 = new Circle(2);
+        Circle ob3 = new Circle(3);
 
-### 실행 속도 계선을 위한 JIT 컴파일러 사용
-- 자바는 바이트 코드를 인터프리터 방식으로 실행함
-- 기계어가 실행되는 것보다는 느림
-- JIT 컴파일 기법으로 실행 속도가 개선됨
+        ob1.set(4);
+        ob1.set(5);
+        ob1.set(6);
+    }
+}
+```
+### this()로 다른 생성자 호출
+- 같은 클래스의 다른 생성자 호출
+- 생성자 내에서만 사용 가능
+- 생성자 코드의 제일 처음 있어야 함
+
+### 객체 배열
+```java
+- 객체에대한 레퍼런스 배열
+- 객체 배열 만들기 3단계
+    1. 배열 레퍼런스 변수 선언
+    2. 레퍼런스 배열 생성
+    3. 배열의 각 원소 객체 생성
+    
+    Circle [] c; // 1. 레퍼런스 변수 선언
+    c = new Circle[5]; // 2. 레퍼런스 배열 생성
+
+    for(int i = 0; i < c.length; i++)
+        c[i] = new Circle(i); // 3. 각 원소 객체 생성
+
+    for(int i = 0; i < c.length; i++) 
+        System.out.println((int) (c[i].getArea()) + " ");   // 배열의 원소 객체 사용
+```
 ---
 
-## 소스 코드, 바이트 코드, 기계어
-
-### 1. 소스코드(Source code)
-- 우리가 작성하는 Java 코드 (.Java 파일)
-- 사람이 읽을 수 있는 고급 언어
-
-### 2. 바이트코드(Bytecode, .class 파일)
-- Java 컴파일러(javac)가 소스코드를 변환한 중간 코드
-- CPU가 직접 실행 불가능 => JVM이 실행해야 함
-- 기계어와 다르게 플랫폼에 독립적임.
-- 바이트코드는 JVM이 해석(인터프리터)하거나, JIT 컴파일러가 기계어로 변환하여 실행됨
-
-### 3. 기계어(Machine Code)
-- CPU가 직접 실행할 수 있는 0과 1의 이진 코드
-- 운영체제(OS)와 CPU 아키텍처(Intel, ARM 등)에 따라 다르게 실행됨
-- 16진수 형태의 기계어
-
-### 4. 바이트코드와 기계어의 차이점
-- 바이트코드는 JVM이 실행하는 중간 코드 ==> 운영체제와 CPU에 관계없이 사용 O
-- 기계어는 CPU가 직접 실행하는 코드 ==> 특정 하드웨어에 종속됨
-
+### 메소드
+```java
+- 자바의 모든 메소드는 반드시 클래스 안에 존재!! (캡슐화)
+- 메소드 형식
+    public int getSum(int i, int j) {   // 접근 지정자, 리턴 타입, 메소드 이름, 메소드 인자들
+        int sum;
+        sum = i + j;    // 메소드 코드
+        return sum;
+    }
+- 접근 지정자
+    - public, private, protected, 디폴트(접근 지정자 생략)
+```
+#### 인자 전달
+- 기본 타입의 값이 전달되는 경우
+    - 매개 변수가 byte, int, double 등 기본 타입 선언 시
+        - 값이 매개 변수에 복사되어 전달. = 실인자 값 변경 x
+- 객제가 전달되는 경우
+    - 객체의 레퍼런스만 전달
+        - 매개 변수가 실인자 객체 공유
+- 배열이 전달되는 경우
+    - 배열 레퍼런스만 매개 변수에 전달
+        - 베열 통째로 전달 x
+    - 객체가 전달되는 경우와 동일
+    ```java
+    // 인자로 배열이 전달되는 예
+    public class ArrayParameter {
+        static void replaceSpace(char a[]) {
+            for(int i = 0; i < a.length; i++)
+                if(a[i] == ' ')
+                    a[i] = ',';
+        }
+        static void replaceSpace(char a[]) {
+            for(int i = 0; i < a.length; i++)
+            System.out.println(a[i]);
+        System.out.println();
+        }
+        public static void main(String[] args) {
+            char c[] = 
+            {'T', 'h', 'i', 's','','i','s','','a','','p','e','n','c','i','l','.'};
+            printCharArray(c);
+            replaceSpace(c);
+            printCharArray(c);
+        }
+    }
+    => This is a pencil.
+       This,is,a,pencil.
+    ```
 ---
-## System.out.print의 종류
-
-### 1. System.out.print( )
-- 기본 출력문
-- 줄 바꿈을 하지 않고 한 줄로 출력함
-- 줄 바꿈을 하려면 개행 문자 \n(new line)를 넣어야 함
-
-### 2. System.out.println( )
-- 출력 후 자동으로 줄 바꿈(개행)을 실행함.
-- 개행 문자 없이 자동으로 줄 바꿈이 되기 때문에 자주 사용함
-- print + line
-
-### 3. System.out.printf( )
-- 형식을 지정(formatting)하여 문자열을 출력할 때 사용함
-- 값을 특정한 형식(소수점 자리 수, 정렬 등)으로 출력할 때 유용함
-
+### 메소드 오버로딩
+- 오버로딩
+    - 한 클래스 내에서 두 개 이상의 이름이 같은 메소드 작성
+        - 메소드 이름 동일
+        - 매개 변수의 개수가 서로 다르거나, 타입이 달라야 함
+        - 리턴 타입은 오버로딩과 관련 x
+- 객체 치환 시 주의할 점
+    - 객체 치환은 객체 복사 x, 레퍼런스 복사 (≒ 포인터 / 주소 복사)
+- 객체 소멸
+    - new로 할당받은 객체와 배열 메모지를 JVM으로 되돌려 주는 행위
+    - 자바는 객체 소멸 연산자 x
+    - 객체 소멸은 JVM의 고유 역할
 ---
+### 가비지
+- 가비지
+    - 가리키는 레퍼런스가 하나도 없는 객체
+        - 더 이상 접근할 수 없어 사용할 수 없게 된 메모리
+- 가비지 컬렉션
+    - JVM의 가비지 컬렉터가 자동으로 가비지 수집, 반환
+
+### 가비지 컬렉션 
+- JVM의 가비지 자동 회수
+    - 가용 메모리 공간이 일정 이할 부족해질 떄
+    - 가비지를 수거 -> 가용 메모리 공간으로 확보
+- 가비지 컬렉터에 의해 자동 수행
+- 강제 가비지 컬렉션 강제 수행
+    - System 또는 Runtime 객체의 gc() 메소드 호출
+    ```java
+    System.gc() // 가비지 컬렉션 잗동 요청
+    ```
+---
+
+### 자바의 패키치
+- 패키지
+    - 상호 관련있는 클래스 파일(컴파일된 .class)을 저장하여 관리하는 디렉터리
+    - 하나 이상의 패키지로 구성
+---
+
+### 접근 지정자
+- public, private, protected, 디폴트(생략)
+- 접근 지정자의 목적
+    - 클래스나 일부 멤버를 공개하여 다른 클래스에서 접근하도록 허용
+    - 캡슐화 정책은 멤버를 보호
+        - 접근 지정은 캡슐화에 묶인 보호를 일부 해체할 목적
+- 공개 범위
+    - private < 디폴트 < protected < public
+- 멤버 접근 지정
+    - public    : 모든 클래스에게 접근 허용 
+    - private   : 동일 클래스 내에서만 접근 허용 (상속받은 서브 클래스에서 접근 불가)
+    - protected : 같은 패키지 내의 다른 모든 클래스에게 접근 허용 
+    - 디폴트    : 같은 패키지 내의 다른 클래스에게 접근 허용
+---
+
+### static 멤버
+```java
+//static 멤버 선언
+
+class StaticSample {
+    int n;         // non-static
+    void g() {...} // non-static 메소드
+
+    static int m;         // static 필드
+    static void f() {...} // static 메소드
+}
+
+- static 멤버는 클래스당 하나만 생성
+- 객체들에 의해 굥유됨
+```
+
+- 클래스 이름으로 접근 가능
+- 객체의 멤버로 접근 가능
+- non-static 멤버는 클래스 이름으로 접근 불가능
+<br><br>
+- static 활용
+    - 전역 변수와 전역 함수를 만들 때 활용
+    - 공유 멤버를 만들고자 할 때
+
+```java
+ex) class Calc {
+    public staitc int abs(int a) { return a>0?a:-a;}
+    public staitc int max(int a, int b) { return (a>b)?a:b;}
+    public staitc int min(int a, int b) { return (a>b)?b:a;}
+    }
+    public class CalcEx {
+        public static void main(String[] args) {
+            System.out.println(calc.abs(-5));
+            System.out.println(calc.max(10, 8));
+            System.out.println(calc.min(-3, -8));
+        }
+    }
+    =>  5
+        10
+        -8
+```
+## 4월 10일(6주차)
+
+### 예외 처리(try-catch-finally)
+```java
+발생한 예외에 대해 개발자가 작성한 프로그램 내에서 대응하는 것
+
+try {
+    예외 발생 가능성 있는 실행문
+}
+catch(처리할 예외 타입 선언) { // ex) ArithmeticException e
+    예외 처리문
+}
+finally {
+    예외 발생 여부와 상관없이 무조건 실행되는 문장 // 생략 가능
+}
+```
+
+### 객체
+    자신만의 고유한 특성(state)과 행동(behavior)을 가지며 다른 객체들에게 행동을 요구하거나 정보를 주고받는 등 상호 작용하며 살아감.
+    - ex) TV, 의자, 책, 집, 카메라, ...
+
+### 자바의 객체 지향 특성 : 캡슐화
+    * 캡슐화 
+    - 객체를 캡슐로 싸서 내부를 볼 수 없게 하는 것
+    - 객체의 가장 본질적인 특징
+    - 외부의 접근으로부터 객체를 보호함
+
+    * 자바의 캡슐화
+    - 클래스(class): 객체 모양을 선언한 틀(캡슐화하는 틀)
+    - 객체: 생성된 실체(instance): 클래스 내에 메소드와 필드 구현
+
+### 자바의 객체 지향 특성 : 상속
+    * 상속
+    - 상위 객체의 속성을 하위 객체에 물려 줌.
+    - 하위 객체가 상위 객체의 속동을 모두 가지는 관계
+
+    * 현실세계의 상속 사례
+    - 나무는 식물의 속성과 생물의 속성을 모두 가짐
+    - 사람은 생물의 속성은 가지지만 식물의 속성은 가지고 있지 않음
+
+### 자바의 상속
+```java
+* 자바의 상속
+- 상위 클래스의 멤버를 하위 클래스가 물려받음
+- 상위 클래스: 슈퍼 클래스
+- 하위 클래스: 서브 클래스, 슈퍼 클래스 코드 재사용, 새로운 특성 추가 O
+
+ex) class Animal {
+        String name;
+        int age;
+        void eat() {...}
+        void speak() {...}
+        void love() {...}
+    }
+            ↑ 상속
+    class Human extends Animal {
+        String hobby;
+        String job;
+        void work() {...}
+        void cry() {...}
+        void laugh() {...}
+    }
+```
+
+### 자바의 객체 지향 특성: 다형성
+    * 다형성
+    - 같은 이름의 메소드가 클래스 혹은 객체에 따라 다르게 구현되는 것
+    * 다형성 사례
+    - 메소드 오버로딩: 한 클래스 내에서 같은 이름이지만 다르게 작동하는 여러 메소드
+    - 메소드 오버라이딩: 슈퍼 클래스의 메소드를 동일한 이름으로 서브 클래스마다 다르게 구현
+
+### 절차 지향 프로그래밍 & 객체 지향 프로그래밍
+    * 절차 지향 프로그래밍
+    - 작업 순서를 표현하는 컴퓨터 명령 집합
+    - 함수들의 집합으로 프로그램 작성
+
+    * 객체 지향 프로그래밍
+    - 컴퓨터가 수행하는 작업을 객체들 간의 상호 작용으로 표현
+    - 클래스 혹은 객체들의 집합으로 프로그램 작성
+
+### 클래스 & 객체
+    * 클래스
+    - 객체의 속성과(state)과 행위(behavior) 선언. 객체의 설계도 or 틀
+
+    * 객체
+    - 클래스의 틀로 찍어난 실체
+    - 프로그램 실행 중에 생성되는 실체
+    - 메모리 공간을 갖는 구체적인 실체
+    - 인스턴스(instance)라고도 함
+
+### 자바 클래스 구성
+```java
+* 자바 클래스
+- class 키워드로 선언
+- 멤버: 클래스 구성 요소. 필드(멤버 변수) & 메소드(멤버 함수)
+- 클래스에 대한 public 접근 지정: 다른 모든 클래스에서 클래스 사용 허락
+- 멤버에 대한 public 접근 지정: 다른 모든 클래스에게 멤버 접근 허용
+
+ex) public class Circle {
+        int radius;     // 필드(멤버 변수)
+        String name;
+
+        public double getArea() {   // 메소드(멤버 함수)
+            return 3.14*radius*radius;
+        }
+    }
+``` 
+
+### 객체 생성과 활용
+```java
+1. 레퍼런스 변수 선언
+Circle pizza; // 레퍼런스 변수 pizza 선언
+```
+
+```java
+2. new 연산자로 객체 생성
+pizza = new Circle(); // Circle 객체 생성
+```
+
+```java
+3. 선언과 동시에 객체 생성
+Circle pizza = new Circle() // 레퍼런스 변수 pizza의 선언과 동시에 객체 생성
+```
+
+```java
+4. 객체 멤버 접근
+- 객체레퍼런스.멤버
+
+ex) pizza.radius = 10; // pizza 객체의 radius 값을 10으로 설정
+    pizza.name = "자바피자" // pizza 객체의 name에 "자바피자" 대입
+    double area = pizza.getArea(); // pizza 객체의 getArea() 메소드 호출
+```
+
+### 생성자
+    - 객체가 생성될 때 초기화 목적으로 실행되는 메소드
+    - 객체가 생성되는 순간에 자동 호출
+
+### 생성자의 특징
+```java
+생성자 이름은 클래스 이름과 동일
+생성자는 여러 개 작성 가능(생성자 중복)
+
+ex) public class Circle {
+        public Circle() {...} // 매개 변수 없는 생성자
+        public Circle(int r, String n) {...} // 2개의 매개 변수를 가진생성자    
+    }
+```
+
+```java
+생성자는 객체 생성 시 한번만 호출
+자바에서 객체 생성은 반드시 new 연산자로 함
+생성자의 목적은 객체 생성 시 초기화
+
+ex) Circle pizza = new Circle(10, "자바피자");  // 생성자 Circle(int r, String n) 호출
+    Circle donut = new Circle();                // 생성자 Circle() 호출
+
+- 생성자는 리턴 타입 지정 불가
+
+ex)
+public void Circle() {...} // error. void를 리턴 타입으로 사용할 수 없음
+```
+--- 
 
 ## 4월 3일(5주차)
 
@@ -335,361 +638,57 @@ java.util.Scanner
 ```
 ---
 
-## 4월 10일(6주차)
-
-### 예외 처리(try-catch-finally)
-```java
-발생한 예외에 대해 개발자가 작성한 프로그램 내에서 대응하는 것
-
-try {
-    예외 발생 가능성 있는 실행문
-}
-catch(처리할 예외 타입 선언) { // ex) ArithmeticException e
-    예외 처리문
-}
-finally {
-    예외 발생 여부와 상관없이 무조건 실행되는 문장 // 생략 가능
-}
-```
-
-### 객체
-    자신만의 고유한 특성(state)과 행동(behavior)을 가지며 다른 객체들에게 행동을 요구하거나 정보를 주고받는 등 상호 작용하며 살아감.
-    - ex) TV, 의자, 책, 집, 카메라, ...
-
-### 자바의 객체 지향 특성 : 캡슐화
-    * 캡슐화 
-    - 객체를 캡슐로 싸서 내부를 볼 수 없게 하는 것
-    - 객체의 가장 본질적인 특징
-    - 외부의 접근으로부터 객체를 보호함
-
-    * 자바의 캡슐화
-    - 클래스(class): 객체 모양을 선언한 틀(캡슐화하는 틀)
-    - 객체: 생성된 실체(instance): 클래스 내에 메소드와 필드 구현
-
-### 자바의 객체 지향 특성 : 상속
-    * 상속
-    - 상위 객체의 속성을 하위 객체에 물려 줌.
-    - 하위 객체가 상위 객체의 속동을 모두 가지는 관계
-
-    * 현실세계의 상속 사례
-    - 나무는 식물의 속성과 생물의 속성을 모두 가짐
-    - 사람은 생물의 속성은 가지지만 식물의 속성은 가지고 있지 않음
-
-### 자바의 상속
-```java
-* 자바의 상속
-- 상위 클래스의 멤버를 하위 클래스가 물려받음
-- 상위 클래스: 슈퍼 클래스
-- 하위 클래스: 서브 클래스, 슈퍼 클래스 코드 재사용, 새로운 특성 추가 O
-
-ex) class Animal {
-        String name;
-        int age;
-        void eat() {...}
-        void speak() {...}
-        void love() {...}
-    }
-            ↑ 상속
-    class Human extends Animal {
-        String hobby;
-        String job;
-        void work() {...}
-        void cry() {...}
-        void laugh() {...}
-    }
-```
-
-### 자바의 객체 지향 특성: 다형성
-    * 다형성
-    - 같은 이름의 메소드가 클래스 혹은 객체에 따라 다르게 구현되는 것
-    * 다형성 사례
-    - 메소드 오버로딩: 한 클래스 내에서 같은 이름이지만 다르게 작동하는 여러 메소드
-    - 메소드 오버라이딩: 슈퍼 클래스의 메소드를 동일한 이름으로 서브 클래스마다 다르게 구현
-
-### 절차 지향 프로그래밍 & 객체 지향 프로그래밍
-    * 절차 지향 프로그래밍
-    - 작업 순서를 표현하는 컴퓨터 명령 집합
-    - 함수들의 집합으로 프로그램 작성
-
-    * 객체 지향 프로그래밍
-    - 컴퓨터가 수행하는 작업을 객체들 간의 상호 작용으로 표현
-    - 클래스 혹은 객체들의 집합으로 프로그램 작성
-
-### 클래스 & 객체
-    * 클래스
-    - 객체의 속성과(state)과 행위(behavior) 선언. 객체의 설계도 or 틀
-
-    * 객체
-    - 클래스의 틀로 찍어난 실체
-    - 프로그램 실행 중에 생성되는 실체
-    - 메모리 공간을 갖는 구체적인 실체
-    - 인스턴스(instance)라고도 함
-
-### 자바 클래스 구성
-```java
-* 자바 클래스
-- class 키워드로 선언
-- 멤버: 클래스 구성 요소. 필드(멤버 변수) & 메소드(멤버 함수)
-- 클래스에 대한 public 접근 지정: 다른 모든 클래스에서 클래스 사용 허락
-- 멤버에 대한 public 접근 지정: 다른 모든 클래스에게 멤버 접근 허용
-
-ex) public class Circle {
-        int radius;     // 필드(멤버 변수)
-        String name;
-
-        public double getArea() {   // 메소드(멤버 함수)
-            return 3.14*radius*radius;
-        }
-    }
-``` 
-
-### 객체 생성과 활용
-```java
-1. 레퍼런스 변수 선언
-Circle pizza; // 레퍼런스 변수 pizza 선언
-```
-
-```java
-2. new 연산자로 객체 생성
-pizza = new Circle(); // Circle 객체 생성
-```
-
-```java
-3. 선언과 동시에 객체 생성
-Circle pizza = new Circle() // 레퍼런스 변수 pizza의 선언과 동시에 객체 생성
-```
-
-```java
-4. 객체 멤버 접근
-- 객체레퍼런스.멤버
-
-ex) pizza.radius = 10; // pizza 객체의 radius 값을 10으로 설정
-    pizza.name = "자바피자" // pizza 객체의 name에 "자바피자" 대입
-    double area = pizza.getArea(); // pizza 객체의 getArea() 메소드 호출
-```
-
-### 생성자
-    - 객체가 생성될 때 초기화 목적으로 실행되는 메소드
-    - 객체가 생성되는 순간에 자동 호출
-
-### 생성자의 특징
-```java
-생성자 이름은 클래스 이름과 동일
-생성자는 여러 개 작성 가능(생성자 중복)
-
-ex) public class Circle {
-        public Circle() {...} // 매개 변수 없는 생성자
-        public Circle(int r, String n) {...} // 2개의 매개 변수를 가진생성자    
-    }
-```
-
-```java
-생성자는 객체 생성 시 한번만 호출
-자바에서 객체 생성은 반드시 new 연산자로 함
-생성자의 목적은 객체 생성 시 초기화
-
-ex) Circle pizza = new Circle(10, "자바피자");  // 생성자 Circle(int r, String n) 호출
-    Circle donut = new Circle();                // 생성자 Circle() 호출
-
-- 생성자는 리턴 타입 지정 불가
-
-ex)
-public void Circle() {...} // error. void를 리턴 타입으로 사용할 수 없음
-```
---- 
 
 
 
-## 4월 17일(7주차)
+## 3월 27일(4주차)
 
-### this 레퍼런스 
-```java
-- 객체 자신에 대한 레퍼런스
-    - 컴파일러에 의해 자동 관리, 개발자는 only 사용
-    - this.멤버 형태로 멤버 접근 시 사용
+### 가비지 컬렉션
+- 자바 언어는 메모리 할당 기능 O / 메모리 반환 기능 X
+- 사용하지 않는 메모리는 JVM에 의해 자동 반환됨
 
-ex) public class Circle {
-    int radius;
-    public Circle(int radius) {
-        this.radius = radius; 
-    }
-    void set(int radius) {
-        this.radius = radius; 
-    }
-    public static void main(String[] args) {
-        Circle ob1 = new Circle(1);
-        Circle ob2 = new Circle(2);
-        Circle ob3 = new Circle(3);
-
-        ob1.set(4);
-        ob1.set(5);
-        ob1.set(6);
-    }
-}
-```
-### this()로 다른 생성자 호출
-- 같은 클래스의 다른 생성자 호출
-- 생성자 내에서만 사용 가능
-- 생성자 코드의 제일 처음 있어야 함
-
-### 객체 배열
-```java
-- 객체에대한 레퍼런스 배열
-- 객체 배열 만들기 3단계
-    1. 배열 레퍼런스 변수 선언
-    2. 레퍼런스 배열 생성
-    3. 배열의 각 원소 객체 생성
-    
-    Circle [] c; // 1. 레퍼런스 변수 선언
-    c = new Circle[5]; // 2. 레퍼런스 배열 생성
-
-    for(int i = 0; i < c.length; i++)
-        c[i] = new Circle(i); // 3. 각 원소 객체 생성
-
-    for(int i = 0; i < c.length; i++) 
-        System.out.println((int) (c[i].getArea()) + " ");   // 배열의 원소 객체 사용
-```
+### 실행 속도 계선을 위한 JIT 컴파일러 사용
+- 자바는 바이트 코드를 인터프리터 방식으로 실행함
+- 기계어가 실행되는 것보다는 느림
+- JIT 컴파일 기법으로 실행 속도가 개선됨
 ---
 
-### 메소드
-```java
-- 자바의 모든 메소드는 반드시 클래스 안에 존재!! (캡슐화)
-- 메소드 형식
-    public int getSum(int i, int j) {   // 접근 지정자, 리턴 타입, 메소드 이름, 메소드 인자들
-        int sum;
-        sum = i + j;    // 메소드 코드
-        return sum;
-    }
-- 접근 지정자
-    - public, private, protected, 디폴트(접근 지정자 생략)
-```
-#### 인자 전달
-- 기본 타입의 값이 전달되는 경우
-    - 매개 변수가 byte, int, double 등 기본 타입 선언 시
-        - 값이 매개 변수에 복사되어 전달. = 실인자 값 변경 x
-- 객제가 전달되는 경우
-    - 객체의 레퍼런스만 전달
-        - 매개 변수가 실인자 객체 공유
-- 배열이 전달되는 경우
-    - 배열 레퍼런스만 매개 변수에 전달
-        - 베열 통째로 전달 x
-    - 객체가 전달되는 경우와 동일
-    ```java
-    // 인자로 배열이 전달되는 예
-    public class ArrayParameter {
-        static void replaceSpace(char a[]) {
-            for(int i = 0; i < a.length; i++)
-                if(a[i] == ' ')
-                    a[i] = ',';
-        }
-        static void replaceSpace(char a[]) {
-            for(int i = 0; i < a.length; i++)
-            System.out.println(a[i]);
-        System.out.println();
-        }
-        public static void main(String[] args) {
-            char c[] = 
-            {'T', 'h', 'i', 's','','i','s','','a','','p','e','n','c','i','l','.'};
-            printCharArray(c);
-            replaceSpace(c);
-            printCharArray(c);
-        }
-    }
-    => This is a pencil.
-       This,is,a,pencil.
-    ```
+## 소스 코드, 바이트 코드, 기계어
+
+### 1. 소스코드(Source code)
+- 우리가 작성하는 Java 코드 (.Java 파일)
+- 사람이 읽을 수 있는 고급 언어
+
+### 2. 바이트코드(Bytecode, .class 파일)
+- Java 컴파일러(javac)가 소스코드를 변환한 중간 코드
+- CPU가 직접 실행 불가능 => JVM이 실행해야 함
+- 기계어와 다르게 플랫폼에 독립적임.
+- 바이트코드는 JVM이 해석(인터프리터)하거나, JIT 컴파일러가 기계어로 변환하여 실행됨
+
+### 3. 기계어(Machine Code)
+- CPU가 직접 실행할 수 있는 0과 1의 이진 코드
+- 운영체제(OS)와 CPU 아키텍처(Intel, ARM 등)에 따라 다르게 실행됨
+- 16진수 형태의 기계어
+
+### 4. 바이트코드와 기계어의 차이점
+- 바이트코드는 JVM이 실행하는 중간 코드 ==> 운영체제와 CPU에 관계없이 사용 O
+- 기계어는 CPU가 직접 실행하는 코드 ==> 특정 하드웨어에 종속됨
+
 ---
-### 메소드 오버로딩
-- 오버로딩
-    - 한 클래스 내에서 두 개 이상의 이름이 같은 메소드 작성
-        - 메소드 이름 동일
-        - 매개 변수의 개수가 서로 다르거나, 타입이 달라야 함
-        - 리턴 타입은 오버로딩과 관련 x
-- 객체 치환 시 주의할 점
-    - 객체 치환은 객체 복사 x, 레퍼런스 복사 (≒ 포인터 / 주소 복사)
-- 객체 소멸
-    - new로 할당받은 객체와 배열 메모지를 JVM으로 되돌려 주는 행위
-    - 자바는 객체 소멸 연산자 x
-    - 객체 소멸은 JVM의 고유 역할
+## System.out.print의 종류
+
+### 1. System.out.print( )
+- 기본 출력문
+- 줄 바꿈을 하지 않고 한 줄로 출력함
+- 줄 바꿈을 하려면 개행 문자 \n(new line)를 넣어야 함
+
+### 2. System.out.println( )
+- 출력 후 자동으로 줄 바꿈(개행)을 실행함.
+- 개행 문자 없이 자동으로 줄 바꿈이 되기 때문에 자주 사용함
+- print + line
+
+### 3. System.out.printf( )
+- 형식을 지정(formatting)하여 문자열을 출력할 때 사용함
+- 값을 특정한 형식(소수점 자리 수, 정렬 등)으로 출력할 때 유용함
+
 ---
-### 가비지
-- 가비지
-    - 가리키는 레퍼런스가 하나도 없는 객체
-        - 더 이상 접근할 수 없어 사용할 수 없게 된 메모리
-- 가비지 컬렉션
-    - JVM의 가비지 컬렉터가 자동으로 가비지 수집, 반환
-
-### 가비지 컬렉션 
-- JVM의 가비지 자동 회수
-    - 가용 메모리 공간이 일정 이할 부족해질 떄
-    - 가비지를 수거 -> 가용 메모리 공간으로 확보
-- 가비지 컬렉터에 의해 자동 수행
-- 강제 가비지 컬렉션 강제 수행
-    - System 또는 Runtime 객체의 gc() 메소드 호출
-    ```java
-    System.gc() // 가비지 컬렉션 잗동 요청
-    ```
----
-
-### 자바의 패키치
-- 패키지
-    - 상호 관련있는 클래스 파일(컴파일된 .class)을 저장하여 관리하는 디렉터리
-    - 하나 이상의 패키지로 구성
----
-
-### 접근 지정자
-- public, private, protected, 디폴트(생략)
-- 접근 지정자의 목적
-    - 클래스나 일부 멤버를 공개하여 다른 클래스에서 접근하도록 허용
-    - 캡슐화 정책은 멤버를 보호
-        - 접근 지정은 캡슐화에 묶인 보호를 일부 해체할 목적
-- 공개 범위
-    - private < 디폴트 < protected < public
-- 멤버 접근 지정
-    - public    : 모든 클래스에게 접근 허용 
-    - private   : 동일 클래스 내에서만 접근 허용 (상속받은 서브 클래스에서 접근 불가)
-    - protected : 같은 패키지 내의 다른 모든 클래스에게 접근 허용 
-    - 디폴트    : 같은 패키지 내의 다른 클래스에게 접근 허용
----
-
-### static 멤버
-```java
-//static 멤버 선언
-
-class StaticSample {
-    int n;         // non-static
-    void g() {...} // non-static 메소드
-
-    static int m;         // static 필드
-    static void f() {...} // static 메소드
-}
-
-- static 멤버는 클래스당 하나만 생성
-- 객체들에 의해 굥유됨
-```
-
-- 클래스 이름으로 접근 가능
-- 객체의 멤버로 접근 가능
-- non-static 멤버는 클래스 이름으로 접근 불가능
-<br><br>
-- static 활용
-    - 전역 변수와 전역 함수를 만들 때 활용
-    - 공유 멤버를 만들고자 할 때
-
-```java
-ex) class Calc {
-    public staitc int abs(int a) { return a>0?a:-a;}
-    public staitc int max(int a, int b) { return (a>b)?a:b;}
-    public staitc int min(int a, int b) { return (a>b)?b:a;}
-    }
-    public class CalcEx {
-        public static void main(String[] args) {
-            System.out.println(calc.abs(-5));
-            System.out.println(calc.max(10, 8));
-            System.out.println(calc.min(-3, -8));
-        }
-    }
-    =>  5
-        10
-        -8
-```
