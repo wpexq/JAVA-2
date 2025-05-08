@@ -1,4 +1,117 @@
 # 안지혜 202430113
+## 5월 8일 (10주차)
+
+### 추상 클래스
+```java
+- 추상 메소드
+    - abstract로 선언된 메소드, 메소드의 코드는 없고 원형만 선언
+    ex) abstract public String getName(); // 추상 메소드
+
+        abstract public String fail() { return "Good Bye" }; // 추상 메소드 아님. 컴파일 오류
+
+- 추상 클래스
+    - 추상 메소드를 가지며, abstract로 선언된 클래스
+    - 추상 메소드 없이, abstract로 선언한 클래스
+ * 추상 클래스는 온전한 클래스가 아니기 때문에 인스턴스 생성 불가능!!
+
+ - 추상 클래스 상속
+    - 추상 클래스를 상속받으면 추상 클래스가 됨
+    - 서브 클래스도 abstract로 선언해야 함
+    ex) abstract class A { // 추상 클래스
+            abstract public int add(int x, int y);  // 추상 메소드
+        }
+        abstract class B extends A {    // 추상 클래스
+            public void show() { System.out.println("B"); }
+        }
+- 추상 클래스 구현
+    - 서브 클래스에서 슈퍼 클래스의 추상 메소드 구현(오버라이딩)
+    * 추상 클래스를 구현한 서브 클래스는 추상 클래스가 아님
+
+- 추상 클래스의 목적   
+    - 상속을 위한 슈퍼 클래스로 활용하는 것
+    - 서브 클래스에서 추상 메소드 구현
+    - 다형성 실현
+```
+---
+
+### 인터페이스
+- 클래스가 구현해야 할 메소드들이 선언되는 추상형
+- interface 키워드로 선언 <br>
+    ex) public interface Example {...}
+
+- 인터페이스 구성 요소
+    - 상수
+        - public (public static final 생략)
+    - 추상 메소드
+        - public abstract 생략 가능
+    - default 메소드 
+        - 인터페이스에 코드가 작성된 메소드
+        - 자동 상속
+        - public 접근 지정만 허용. 생략 가능
+    - private 메소드
+        - 인터페이스 내에 메소드 코드가 작성되어야 함
+        - 인터페이스 내에 있는 다른 메소드에 의해서만 호출 가능
+    - static 메소드
+        - public, private 모두 지정 가능. 생략하면 public
+- 인터페이스의 객체 생성 불가
+- 인터페이스 타입의 레퍼런스 변수 선언 가능
+
+```java
+- 인터페이스 간에 상속 가능
+    - extends 키워드로 상속 선언
+    ex) interface MobliePthoneInterface extends PhoneInterface {
+        // 추상 메소드 추가
+        void sendSMS();
+        void receiveSMS();
+    }
+    ex) interface MusicPhoneInterface extends PhoneInterface. MP3Interface {...} // 인터페이스 다중 상속 가능
+- 인터페이스 구현
+    - implemnets 키워드 사용
+    - 여러 개의 인터페이스 동시 구현 가능
+```
+---
+
+### 패키지
+- 3명이 분담하여 자바 응용프로그램을 개발하는 겨우, 동일한 이름의 클래스가 존재할 가능성이 있다 -> 합칠 때 오류 발생 가능성
+    - 이름은 같지만 경로명이 달라 서로 다른 파일로 취급!
+
+```
+패키지와 모듈이란?
+- 패키지
+    - 서로 관련된 클래스 파일들을 묶어 놓은 디렉토리
+    - 한 개 이상의 패키지로 작성
+    - 패키지는 jar 파일로 압축 가능
+
+- 모듈
+    - 여러 패키지와 이미지 등의 자원을 모아 놓은 컨테이너
+    - 하나의 모듈을 하나의 .jmod 파일에 저장
+
+- 모듈화의 목적
+    - 응용프로그램이 실행할 때 꼭 필요한 모듈들로만 실행 환경 구축 : 메모리 자원이 열악한 작은 소형 기기에 꼭 필요한 모듈로 구성된 작은 크기의 시행 이미지를 만들기 위함
+
+    - 복잡한 개념
+    - 큰 자바 응용프로그램에는 개발, 유지 보수 등에 적합
+
+- 패키지 사용하기, import
+    - 다른 패키지에 작성된 클래스 사용
+        - import 이용 x
+            => 소스에 클래스 이름의 완전 경로명 사용
+        - 필요한 클래스만 import
+            => 소스 시작 부분에 클래스의 경로명 import
+            => import 패키지.클래스
+            => 소스에는 클래스 명만 명시하면 됨
+        - 패키지 전체를 import
+            => 소스 시작 부분에 패키지의 경로명.* import
+            => import 패키지.*
+            => import java.util.*;
+
+- 디폴트 패키지 
+    - package 선언문이 없는 자바 소스 파일의 경우
+        - 컴파일러는 클래스나 인터페이스를 디폴트 패키지에 소속시킴
+
+```
+
+
 ## 4월 17일(7주차)
 
 ### this 레퍼런스 
